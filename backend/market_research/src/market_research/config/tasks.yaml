@@ -1,0 +1,145 @@
+# 1) MARKET RESEARCH
+research_task:
+  description: >
+    Investigate the market for "{startup_idea}" in the {topic} sector. Define the market,
+    target customers, key use cases, demand drivers, inhibitors, and regulatory notes.
+    Collect defensible data points (market size, growth claims, pricing ranges) and ALWAYS include citations.
+  expected_output: >
+    Markdown with:
+    - Overview (what the market is, who buys, main jobs-to-be-done)
+    - Size & growth claims (quote numbers + name the source)
+    - Demand drivers & inhibitors (bulleted, concise)
+    - Risks & compliance notes (if any)
+    - Inline citation markers like [1], [2] in the text
+    - Sources list with 6–10 bullets: Title — URL — Accessed: YYYY-MM-DD
+    - Every numeric claim must map to one of the sources.
+  acceptance_criteria: >
+    - Each numeric claim has an inline marker and a matching source entry with URL + access date.
+    - No hand-wavy phrases (“huge”, “massive”) without numbers.
+    - Clear distinction between facts vs assumptions.
+  agent: researcher
+  inputs:
+    startup_idea: "{startup_idea}"
+    topic: "{topic}"
+
+# 2) COMPETITIVE ANALYSIS
+competitive_analysis_task:
+  description: >
+    Identify and analyze competitors/alternatives for "{startup_idea}" in the {topic} space.
+    Focus on positioning, pricing, differentiation, and stage (bootstrapped/Seed/Series A+).
+    Highlight whitespace opportunities the startup can target.
+  expected_output: >
+    Markdown with:
+    - Short competitive landscape summary
+    - A structured table with columns:
+      [Name, Geo, Stage, Customer (B2B/B2C), Pricing (range/tier), Key Features,
+       Differentiators, Notes, Source URL]
+    - 3–5 bullets on whitespace/opportunities
+    - Each table row must include a Source URL.
+  acceptance_criteria: >
+    - Table contains 8–15 relevant competitors or credible substitutes.
+    - Pricing and differentiators are specific (no vague “affordable”, “better UX”).
+    - Each row has at least one source URL that resolves.
+  agent: competitive_analyst
+  inputs:
+    startup_idea: "{startup_idea}"
+    topic: "{topic}"
+
+# 3) FORECAST (LLM-PROVIDED NUMBERS → CHART)
+forecast_task:
+  description: >
+    Using the research + competitor insights, produce a realistic 5-year growth forecast for
+    "{startup_idea}" expressed as VALID JSON for charting. Start from {start_year} and include
+    exactly 5 yearly points. Include a brief Markdown summary of assumptions FIRST, then a JSON code block.
+    Place the JSON at the end; do not include any text after it.
+  expected_output: >
+    1) Markdown: 3–6 sentences on key assumptions (adoption, pricing, segment focus).
+    2) A JSON code block fenced with ```json and EXACT shape:
+       {
+         "title": "Forecast for {startup_idea}",
+         "unit": "{unit}",        // e.g., USD, users, transactions
+         "series": [
+           { "year": {start_year},     "value": 50000 },
+           { "year": {start_year+1},   "value": 80000 },
+           { "year": {start_year+2},   "value": 120000 },
+           { "year": {start_year+3},   "value": 160000 },
+           { "year": {start_year+4},   "value": 210000 }
+         ],
+         "scenarios": ["base","optimistic"]   // names only; single-line chart for now
+       }
+    Rules:
+    - Years must be integers in ascending order starting at {start_year}, exactly 5 points.
+    - Values must be pure numbers (no commas, currency symbols, or % signs).
+    - JSON must be the final content of the message; nothing after the closing fence.
+    - If scenarios aren’t used, return "scenarios": [].
+  acceptance_criteria: >
+    - JSON parses without errors and matches the schema.
+    - Years are unique and strictly increasing: {start_year}..{start_year+4}.
+    - All values are numeric; units appear ONLY in "unit".
+  agent: forecast_analyst
+  inputs:
+    startup_idea: "{startup_idea}"
+    topic: "{topic}"
+    start_year: "{start_year}"
+    unit: "{unit}"
+
+# 4) REPORT SYNTHESIS
+synthesis_task:
+  description: >
+    Combine the outputs from the research, competitive analysis, and forecast tasks into a single,
+    professional market research report for "{startup_idea}".
+    The report should read like an executive briefing: concise, structured, and factual.
+    Preserve all URLs and citations from previous tasks. When a competitor, data point, or source
+    is mentioned, include the original Source URL in Markdown link format — for example:
+    [Afresh](https://www.afresh.com).
+    Do NOT modify or restate the forecast JSON; simply reference it in the Forecast section.
+    The final report must be fully self-contained, readable, and ready for export or display in a web app.
+
+  expected_output: >
+    Markdown document with the following sections:
+
+    1. **Title & Executive Summary**
+       - 1–2 paragraphs summarizing the startup, market space, and key findings.
+       - Focus on clarity and readability — write like an investor briefing.
+
+    2. **Market Overview**
+       - Summarize key insights from the research task: market size, growth rates, drivers, and inhibitors.
+       - Use inline citation markers (e.g., [1], [2]) that correspond to URLs in the Sources section.
+
+    3. **Key Trends & Drivers**
+       - 4–6 concise bullet points describing relevant trends or dynamics shaping the market.
+       - Include inline citations for each data-driven claim.
+
+    4. **Competitive Landscape**
+       - Summarize findings from the competitive analysis.
+       - Mention top competitors as Markdown links, e.g., [Afresh](https://www.afresh.com).
+       - Highlight each competitor’s positioning, unique feature, and whitespace opportunity.
+       - If a table was produced earlier, note that the full competitor table is available.
+
+    5. **Forecast Summary**
+       - Reference the forecast JSON produced earlier.
+       - Do NOT alter or restate any numbers — simply summarize assumptions and implications.
+       - Example phrasing: “See the 5-year forecast JSON above for detailed projections.”
+
+    6. **Opportunities & Risks**
+       - 3–5 bullet points each for opportunities and risks, written for strategic clarity.
+       - Balance optimism with realism.
+
+    7. **Sources & Citations**
+       - Combine all unique URLs and citations from research and competitive analysis.
+       - Format as a numbered Markdown list with:  
+         *Title* — [URL](https://example.com) — *Accessed: YYYY-MM-DD*  
+       - Ensure each inline marker [1], [2] maps to a real source.
+
+  acceptance_criteria: >
+    - The report contains all 7 sections with clear Markdown headings.
+    - Inline citations are preserved and map to the Sources section.
+    - All competitor mentions and references retain clickable Markdown URLs.
+    - The forecast JSON is referenced but not modified.
+    - Tone is factual, confident, and easy to skim (no filler language or repetition).
+
+  agent: report_synthesizer
+  inputs:
+    startup_idea: "{startup_idea}"
+    topic: "{topic}"
+
