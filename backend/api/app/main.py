@@ -160,17 +160,16 @@ async def run_research(request: ResearchRequest):
         tasks_output = result.tasks_output if hasattr(result, 'tasks_output') else []
         
         # Extract outputs from each task
-        # Task order: research_task, competitive_analysis_task, forecast_task, synthesis_task
+        # NEW Task order (3 tasks): research_task, forecast_task, synthesis_task
         research_output = str(tasks_output[0].raw) if len(tasks_output) > 0 else ""
-        competitive_output = str(tasks_output[1].raw) if len(tasks_output) > 1 else ""
-        forecast_output = str(tasks_output[2].raw) if len(tasks_output) > 2 else ""
-        synthesis_output = str(tasks_output[3].raw) if len(tasks_output) > 3 else str(result)
+        forecast_output = str(tasks_output[1].raw) if len(tasks_output) > 1 else ""
+        synthesis_output = str(tasks_output[2].raw) if len(tasks_output) > 2 else str(result)
         
         # Parse forecast JSON from the forecast_task output
         forecast_data = extract_json_from_text(forecast_output)
         
-        # Extract competitors from competitive analysis output
-        competitors = extract_competitors_from_text(competitive_output)
+        # Extract competitors from research output (competitors are now in research_task)
+        competitors = extract_competitors_from_text(research_output)
         if not competitors:
             competitors = ["No competitors found"]
         

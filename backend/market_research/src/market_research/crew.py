@@ -25,29 +25,25 @@ class MarketResearch():
     def researcher(self) -> Agent:
         return Agent(
             config=self.agents_config['researcher'], 
-            tools=[search_tool, scrape_tool],
-            verbose=True
-        )
-
-    @agent
-    def competitive_analyst(self) -> Agent:
-        return Agent(
-            config=self.agents_config['competitive_analyst'], 
-            verbose=True
+            tools=[search_tool, scrape_tool],  # Keep both but agent will limit scrape usage
+            verbose=True,
+            # Removed max_iter to allow more thorough research
         )
     
     @agent
     def forecast_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['forecast_analyst'], 
-            verbose=True
+            verbose=True,
+            # Removed max_iter to allow detailed analysis
         )
 
     @agent
     def report_synthesizer(self) -> Agent:
         return Agent(
             config=self.agents_config['report_synthesizer'], 
-            verbose=True
+            verbose=True,
+            # Removed max_iter to allow comprehensive synthesis
         )
 
     # To learn more about structured task outputs,
@@ -60,22 +56,17 @@ class MarketResearch():
         )
 
     @task
-    def competitive_analysis_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['competitive_analysis_task'], # type: ignore[index]
-            context=[self.research_task()],
-        )
-
-    @task
     def forecast_task(self) -> Task:
         return Task(
             config=self.tasks_config['forecast_task'], # type: ignore[index]
+            context=[self.research_task()],  # Needs research results
         )
 
     @task
-    def report_synthesis_task(self) -> Task:
+    def synthesis_task(self) -> Task:
         return Task(
             config=self.tasks_config['synthesis_task'], # type: ignore[index]
+            context=[self.research_task(), self.forecast_task()],  # Needs both
         )
 
     @crew
