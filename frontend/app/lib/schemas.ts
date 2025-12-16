@@ -8,14 +8,14 @@ export const startupIdeaSchema = z.string()
   .trim();
 
 export const forecastSeriesSchema = z.object({
-  year: z.number().int(),
-  value: z.number().nonnegative(),
+  year: z.coerce.number().int(),
+  value: z.coerce.number().nonnegative(),
 });
 
 export const forecastSchema = z.object({
   title: z.string(),
   unit: z.string(),
-  series: z.array(forecastSeriesSchema),
+  series: z.array(forecastSeriesSchema).min(1, "Forecast must include at least one data point"),
   scenarios: z.array(z.string()).optional(),
 });
 

@@ -16,9 +16,15 @@ research_task:
     
     ## Competitive Landscape (200-250 words)
     - Competitive positioning summary (2-3 paragraphs)
-    - Top 5 competitors with detailed analysis:
-      • [Company Name](URL) - 2-3 sentences on positioning, pricing, key features, differentiation
-      • [Company Name](URL) - 2-3 sentences on positioning, pricing, key features, differentiation
+    - Top 5 competitors with detailed analysis. Format each competitor as:
+      • [Company Name](URL) — Brief positioning statement (1-2 sentences)
+        - Strengths: (key strengths on the same line, comma-separated)
+        - Differentiation: (key differentiators on the same line)
+        - Weakness/Threat: (key weaknesses or competitive threats on the same line)
+      • [Company Name](URL) — Brief positioning statement (1-2 sentences)
+        - Strengths: (key strengths on the same line, comma-separated)
+        - Differentiation: (key differentiators on the same line)
+        - Weakness/Threat: (key weaknesses or competitive threats on the same line)
       • ... (repeat for all 5)
     
     ## Market Trends & Drivers (150-200 words)
@@ -45,28 +51,19 @@ research_task:
     startup_idea: "{startup_idea}"
     topic: "{topic}"
 
-# 2) FORECAST (Detailed Assumptions)
+# 2) FORECAST (Structured Data Only)
 forecast_task:
   description: >
     Using the comprehensive research insights, produce a realistic and data-driven 5-year growth forecast
     for "{startup_idea}". Base your projections on the market size, competitive landscape, and trends
-    identified in the research. Provide detailed assumptions and reasoning for your forecast model.
-    Express as VALID JSON for charting. Start from {start_year}.
+    identified in the research. 
+    
+    CRITICAL: You MUST output ONLY a valid JSON object. Do NOT include any text descriptions, 
+    assumptions, or explanations. The backend will extract this JSON and use it for charting.
+    The frontend will render the chart automatically - you do not need to describe it.
   expected_output: >
-    ## Forecast Assumptions (150-200 words)
+    Output ONLY a valid JSON object (no markdown, no code fences, no explanations):
     
-    Detail your forecasting methodology:
-    - Revenue model and pricing assumptions
-    - Market penetration and adoption rates
-    - Key assumptions about customer acquisition, retention, and growth drivers
-    - Conservative vs. optimistic scenarios
-    - Year-over-year growth rationale (why growth accelerates or decelerates)
-    
-    ## CHART DATA (REQUIRED - MUST BE VALID JSON):
-    
-    You MUST output a valid JSON object that can be directly used for charting. The JSON must follow this EXACT structure:
-    
-    ```json
     {
       "title": "5-Year Growth Forecast for {startup_idea}",
       "unit": "{unit}",
@@ -79,15 +76,21 @@ forecast_task:
       ],
       "scenarios": ["conservative", "optimistic"]
     }
-    ```
     
-    IMPORTANT: The JSON must be valid and parseable. Use numeric values only (no commas, no currency symbols, no % signs).
+    IMPORTANT RULES:
+    - Output ONLY the JSON object, nothing else
+    - Do NOT wrap it in code fences (```json)
+    - Do NOT add headings like "CHART DATA" or "Forecast JSON"
+    - Do NOT include text descriptions or assumptions
+    - Use numeric values only (no commas, no currency symbols, no % signs)
+    - Title should be short and descriptive (max 100 characters)
+    - Exactly 5 years from {start_year} to {start_year+4}
   acceptance_criteria: >
-    - Assumptions are detailed and explain the reasoning for each year's growth
+    - Output is ONLY valid JSON (no surrounding text)
     - JSON parses without errors
     - Exactly 5 years from {start_year} to {start_year+4}
     - Values are numeric (no commas or currency symbols)
-    - Growth trajectory is explained and justified
+    - Title is concise and descriptive
   agent: forecast_analyst
   inputs:
     startup_idea: "{startup_idea}"
@@ -102,41 +105,94 @@ synthesis_task:
     This should be a detailed, professional report suitable for investors or decision-makers.
     Preserve all URLs and citations from research. Expand on the insights—don't just summarize.
     Make it thorough and insightful while maintaining clarity and structure.
+    
+    CRITICAL FORMATTING RULES:
+    - Do NOT include any JSON code blocks, JSON objects, or "Forecast JSON" text
+    - Do NOT reference "the forecast JSON" or "chart data"
+    - Do NOT include code fences (```json or ```)
+    - The forecast data is handled separately by the backend - you only need to discuss the forecast insights in text
+    - Use markdown formatting (##, ###, bullet lists) for structure
+    - All links must be in markdown format: [Company Name](URL)
+    - IMPORTANT: Use ### (three hashes) for subheadings like "Key findings:", "Strategic implications:", 
+      "Market overview", "Summary", "Opportunities", "Risks and mitigation strategies", 
+      "Key success factors", "Next steps", "Market gaps and white space opportunities:",
+      "Competitive advantages and challenges:" - these should be on their own line with ### prefix
+    - Example format: "### Key findings:" followed by content on the next line
+    - Example: "### Market gaps and white space opportunities:" followed by bullet points
+    - CRITICAL: When listing items under sub-sub topics (like under "Target customer segments and buyer personas:"),
+      ALWAYS use markdown bullet format with dashes: "- Item 1" on a new line, "- Item 2" on the next line, etc.
+      - NEVER use plain text lines for lists - always format as markdown bullets with dashes
+      - Keep bullet point content concise (aim for 60-80 characters per line when possible) to prevent wrapping
+      - Example: Under "### Target customer segments and buyer personas:" use:
+        - Time‑constrained professionals (age 25–45) who want low‑effort expense control...
+        - Irregular‑income workers (freelancers, gig workers) who need short‑horizon cashflow...
+        - Solopreneurs/side‑business owners managing combined personal/business flows...
+        - Privacy‑sensitive high‑ARPU users willing to pay for local processing/no ads.
+    - CRITICAL: For competitor analysis, format each competitor with nested bullets:
+      - [Company Name](URL) — Positioning statement (1-2 sentences)
+        - Strengths: (content on same line, keep concise - max 2-3 key points, comma-separated, e.g., "Therapy‑specific models, safety flagging, supervisor dashboards")
+        - Differentiation: (content on same line, keep concise - max 1-2 sentences, e.g., "Product built explicitly for behavioral health with clinical‑quality measures")
+        - Threat: (content on same line, keep concise - max 1-2 sentences, e.g., "Limited brand recognition relative to large EHRs")
+      NEVER put Strengths, Differentiation, or Threat as inline text within the positioning statement - always use nested bullet points with content on the same line
+      IMPORTANT: Keep bullet point content concise to avoid wrapping - aim for 60-80 characters per bullet when possible
   expected_output: >
-    Complete Executive Market Research Report:
+    Complete Executive Market Research Report (Markdown format):
     
-    ## Executive Summary (200-250 words)
+    ## Executive Summary
     - Comprehensive overview of the startup idea and its market positioning
-    - Key findings and insights (4-5 paragraphs)
+    - ### Key findings:
+      (4-5 paragraphs of key findings)
     - Market opportunity size and potential
-    - Strategic implications for the startup
+    - ### Strategic implications:
+      (strategic implications content)
     
-    ## Market Analysis (250-300 words)
-    - Detailed market overview based on research
+    ## Market Analysis
+    - ### Market overview
+      (detailed market overview based on research)
     - Market size, growth trends, and dynamics [1]
-    - Target customer segments and buyer personas
+    - ### Target customer segments and buyer personas
+      - Time‑constrained professionals (age 25–45) who want low‑effort expense control...
+      - Irregular‑income workers (freelancers, gig workers) who need short‑horizon cashflow...
+      - Solopreneurs/side‑business owners managing combined personal/business flows...
+      - Privacy‑sensitive high‑ARPU users willing to pay for local processing/no ads.
     - Key industry trends and drivers shaping the market
     - Market structure and competitive dynamics
     
-    ## Competitive Intelligence (250-300 words)
-    - Summary of competitive landscape positioning
-    - Detailed analysis of top 3-4 competitors with links: [Company Name](URL)
-    - Each competitor's positioning, strengths, and differentiation
-    - Market gaps and white space opportunities
-    - Competitive advantages and challenges
+    ## Competitive Intelligence
+    - ### Summary
+      (summary of competitive landscape positioning)
+    - Detailed analysis of top competitors with links. Format each competitor EXACTLY as:
+      - [Company Name](URL) — Brief positioning statement (1-2 sentences)
+        - Strengths: (key strengths on the same line, comma-separated, keep concise - max 2-3 key points)
+        - Differentiation: (key differentiators on the same line, keep concise - max 1-2 sentences)
+        - Threat: (competitive threats or challenges on the same line, keep concise - max 1-2 sentences)
+      IMPORTANT: Keep bullet point content concise (aim for 60-80 characters) to prevent wrapping to next line
+      Example:
+      - [Rocket Money](https://www.rocketmoney.com/pricing) — Positions as a subscription/bill manager and savings negotiator.
+        - Strengths: aggressive subscription detection, bill negotiation service (contingent fee), and productized savings.
+        - Differentiation: transactional revenue model (savings take‑rate) and heavy focus on subscription control.
+        - Threat: they own the "subscription cancellation" narrative and user intent, so Micro‑SaaS must avoid competing on cancellation mechanics.
+    - ### Market gaps and white space opportunities:
+      - (list of market gaps and opportunities as bullet points)
+    - ### Competitive advantages and challenges:
+      - (list of advantages and challenges as bullet points)
     
-    ## Growth Forecast & Strategy (200-250 words)
-    - Summary of the 5-year forecast (reference JSON from forecast_task)
+    ## Growth Forecast & Strategy
+    - Summary of the 5-year forecast trajectory and key assumptions
     - Detailed discussion of growth assumptions and rationale
     - Key milestones and inflection points
     - Strategic implications for go-to-market approach
     - Investment requirements and scaling considerations
     
-    ## Strategic Recommendations (200 words)
-    - Opportunities (3-4 detailed recommendations with specific actions)
-    - Risks and mitigation strategies (3-4 detailed points)
-    - Key success factors
-    - Next steps and recommendations
+    ## Strategic Recommendations
+    - ### Opportunities
+      (3-4 detailed recommendations with specific actions)
+    - ### Risks and mitigation strategies
+      (3-4 detailed points)
+    - ### Key success factors
+      (key success factors content)
+    - ### Next steps
+      (next steps and recommendations)
     
     ## Sources & Citations
     [1] Title — [URL](link) — Accessed: YYYY-MM-DD
@@ -145,11 +201,13 @@ synthesis_task:
     
   acceptance_criteria: >
     - Each section is comprehensive with detailed analysis (not summaries)
-    - Total length: 1,100-1,400 words (excluding sources)
     - All URLs and citations preserved from research
     - Competitors listed with clickable markdown links
-    - Forecast referenced with detailed explanation
+    - Forecast discussed in narrative form (no JSON references)
+    - NO JSON code blocks, JSON objects, or "Forecast JSON" text anywhere
     - Professional tone suitable for investor presentation
+    - Inline citations like [1], [2] should reference sources in the Sources section
+    - Output is clean markdown only
   agent: report_synthesizer
   inputs:
     startup_idea: "{startup_idea}"
