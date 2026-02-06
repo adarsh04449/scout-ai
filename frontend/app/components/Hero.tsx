@@ -20,10 +20,10 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef}
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A]"
     >
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(147,51,234,0.12),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(47,91,255,0.18),transparent_55%),radial-gradient(ellipse_at_bottom,rgba(0,0,0,0.6),transparent_60%)]" />
       
       {/* Startup Cards Background - Parallax Effect */}
       <div className="absolute inset-0 z-0">
@@ -49,8 +49,8 @@ export default function Hero() {
           );
           const opacity = useTransform(
             scrollYProgress,
-            [0, 0.5, 1],
-            [0.7, 0.7, 0.3]
+            [1, 1, 1],
+            [1, 1, 1]
           );
 
           // Special positioning for Vercel card - to the right of the button
@@ -113,7 +113,7 @@ export default function Hero() {
           const opacity = useTransform(
             scrollYProgress,
             [0, 0.5, 1],
-            [0.6, 0.6, 0.2]
+            [0.9, 0.9, 0.65]
           );
 
           const positions = [
@@ -147,7 +147,7 @@ export default function Hero() {
       </div>
 
       {/* Overlay for better text readability */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-gray-900/60 via-gray-900/40 to-gray-900/80" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0A0A0A]/70 via-[#0A0A0A]/40 to-[#0A0A0A]/90" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
         <div className="flex flex-col items-center text-center">
@@ -162,8 +162,8 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="w-full max-w-5xl"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-lg">
-              Every idea begins with a vision worth chasing. We help you understand the market behind it.
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+              Research Smarter. Grow Faster. <span className="italic font-normal">With AI</span>.
             </h1>
           </motion.div>
 
@@ -176,7 +176,7 @@ export default function Hero() {
           >
             <Link
               href="/research"
-              className="inline-block px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 transition-colors font-semibold text-lg shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/50"
+              className="inline-block px-8 py-4 rounded-xl bg-[#111111] transition-all font-semibold text-lg text-white border border-white/20 hover:border-white/40 hover:shadow-[0_12px_26px_rgba(255,255,255,0.2)]"
             >
               Start Researching
             </Link>

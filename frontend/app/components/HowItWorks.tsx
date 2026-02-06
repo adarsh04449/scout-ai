@@ -44,7 +44,7 @@ export default function HowItWorks() {
   return (
     <section 
       ref={containerRef}
-      className="relative w-full py-16 sm:py-20 bg-gray-900"
+      className="relative w-full py-16 sm:py-20 bg-[#0A0A0A]"
     >
       <div className="max-w-4xl mx-auto px-4">
         <motion.div
@@ -57,16 +57,16 @@ export default function HowItWorks() {
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             How it works
           </h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[#94A3B8] text-lg">
             Three simple steps to market insights
           </p>
         </motion.div>
 
         <div className="relative">
           {/* Vertical connector line */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-700 hidden md:block">
+          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#1F2937] hidden md:block">
             <motion.div
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-blue-600 to-purple-600"
+              className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#2F5BFF] to-[#2346D1]"
               style={{ height: `${lineProgress}%` }}
             />
           </div>
@@ -93,7 +93,7 @@ export default function HowItWorks() {
                 >
                   {/* Step number circle */}
                   <div className="relative z-10 flex-shrink-0">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/50">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2F5BFF] to-[#2346D1] flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-[#2F5BFF]/25">
                       {step.number}
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export default function HowItWorks() {
                     <h3 className="text-2xl font-semibold text-white mb-3">
                       {step.title}
                     </h3>
-                    <p className="text-gray-300 text-lg leading-relaxed">
+                    <p className="text-[#94A3B8] text-lg leading-relaxed">
                       {step.description}
                     </p>
                   </div>

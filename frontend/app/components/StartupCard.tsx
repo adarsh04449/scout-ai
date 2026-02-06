@@ -119,11 +119,11 @@ export default function StartupCard({ startup, translateX, translateY, rotate, o
           
           {/* Enhanced gradient overlay */}
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent"
             animate={{
               background: isHovered 
-                ? "linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2), transparent)"
-                : "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2), transparent)"
+                ? "linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.15), transparent)"
+                : "linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.15), transparent)"
             }}
             transition={{ duration: 0.3 }}
           />

@@ -54,15 +54,15 @@ const itemVariants = {
 };
 
 const colorClasses: Record<string, string> = {
-  blue: "bg-blue-600/20 text-blue-300 border-blue-500/30",
-  purple: "bg-purple-600/20 text-purple-300 border-purple-500/30",
-  emerald: "bg-emerald-600/20 text-emerald-300 border-emerald-500/30",
-  pink: "bg-pink-600/20 text-pink-300 border-pink-500/30"
+  blue: "border-[#2A2A2A]",
+  purple: "border-[#2A2A2A]",
+  emerald: "border-[#2A2A2A]",
+  pink: "border-[#2A2A2A]"
 };
 
 export default function Features() {
   return (
-    <section className="relative w-full py-16 sm:py-20 bg-gray-900">
+    <section className="relative w-full py-16 sm:py-20 bg-[#0A0A0A]">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -74,8 +74,8 @@ export default function Features() {
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Everything you need to validate your idea
           </h2>
-          <p className="text-gray-400 text-lg">
-            Powerful insights in minutes, not weeks
+          <p className="text-[#94A3B8] text-lg">
+            Powerful insights in minutes
           </p>
         </motion.div>
 
@@ -102,25 +102,25 @@ export default function Features() {
               mouseY.set(y - 0.5);
             };
 
-            const glowColor = feature.color === 'blue' ? 'bg-blue-500/30' :
-                             feature.color === 'purple' ? 'bg-purple-500/30' :
-                             feature.color === 'emerald' ? 'bg-emerald-500/30' :
-                             'bg-pink-500/30';
+            const glowColor = feature.color === 'blue' ? 'bg-[#3B82F6]/25' :
+                             feature.color === 'purple' ? 'bg-[#8B5CF6]/25' :
+                             feature.color === 'emerald' ? 'bg-[#10B981]/25' :
+                             'bg-[#EC4899]/25';
             
-            const borderGlowColor = feature.color === 'blue' ? 'bg-blue-500' :
-                                    feature.color === 'purple' ? 'bg-purple-500' :
-                                    feature.color === 'emerald' ? 'bg-emerald-500' :
-                                    'bg-pink-500';
+            const borderGlowColor = feature.color === 'blue' ? 'bg-[#3B82F6]' :
+                                    feature.color === 'purple' ? 'bg-[#8B5CF6]' :
+                                    feature.color === 'emerald' ? 'bg-[#10B981]' :
+                                    'bg-[#EC4899]';
             
-            const accentColor = feature.color === 'blue' ? 'bg-blue-500/30' :
-                               feature.color === 'purple' ? 'bg-purple-500/30' :
-                               feature.color === 'emerald' ? 'bg-emerald-500/30' :
-                               'bg-pink-500/30';
+            const accentColor = feature.color === 'blue' ? 'bg-[#3B82F6]/25' :
+                               feature.color === 'purple' ? 'bg-[#8B5CF6]/25' :
+                               feature.color === 'emerald' ? 'bg-[#10B981]/25' :
+                               'bg-[#EC4899]/25';
             
-            const textHoverColor = feature.color === 'blue' ? '#93c5fd' :
-                                  feature.color === 'purple' ? '#c4b5fd' :
-                                  feature.color === 'emerald' ? '#6ee7b7' :
-                                  '#f9a8d4';
+            const textHoverColor = feature.color === 'blue' ? '#60A5FA' :
+                                  feature.color === 'purple' ? '#C4B5FD' :
+                                  feature.color === 'emerald' ? '#6EE7B7' :
+                                  '#F9A8D4';
 
             return (
               <motion.div
@@ -153,9 +153,11 @@ export default function Features() {
                     scale: isHovered ? 1.05 : 1,
                     transformStyle: "preserve-3d",
                   }}
-                  className={`rounded-2xl border ${colorClasses[feature.color]} bg-gray-900 p-6 relative overflow-hidden transition-all duration-300 h-full flex flex-col`}
+                  className={`rounded-2xl border ${colorClasses[feature.color]} bg-[#111111] p-6 relative overflow-hidden transition-all duration-300 h-full flex flex-col shadow-[0_12px_30px_rgba(0,0,0,0.35)]`}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
+                  {/* Subtle 3D rim lighting */}
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-black/30" />
                   {/* Shine effect */}
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/10 pointer-events-none z-10"
@@ -211,7 +213,7 @@ export default function Features() {
                     {feature.title}
                   </motion.h3>
                   
-                  <p className="text-gray-300 text-sm leading-relaxed relative z-0 flex-grow">
+                  <p className="text-[#94A3B8] text-sm leading-relaxed relative z-0 flex-grow">
                     {feature.description}
                   </p>
                   

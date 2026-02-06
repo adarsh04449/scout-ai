@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Problem() {
   return (
-    <section className="relative w-full py-16 sm:py-20 bg-gray-900">
+    <section className="relative w-full py-16 sm:py-20 bg-[#0A0A0A]">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -15,7 +15,7 @@ export default function Problem() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
             Skip the hours of research.
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
             Get instant market analysis, competitor mapping, and revenue forecasts.
           </p>
         </motion.div>

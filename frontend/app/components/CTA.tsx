@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function CTA() {
   return (
-    <section className="relative w-full py-20 sm:py-28 bg-gradient-to-b from-gray-900 to-gray-800">
+    <section className="relative w-full py-20 sm:py-28 bg-gradient-to-b from-[#0A0A0A] to-[#111111]">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -24,7 +24,7 @@ export default function CTA() {
           >
             <Link
               href="/research"
-              className="inline-block px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 transition-colors font-semibold text-lg shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/50 hover:scale-105 transform transition-transform"
+              className="inline-block px-8 py-4 rounded-xl bg-[#111111] transition-all font-semibold text-lg text-white hover:scale-105 transform transition-transform border border-white/20 hover:border-white/40 hover:shadow-[0_12px_26px_rgba(255,255,255,0.2)]"
             >
               Try It Free
             </Link>

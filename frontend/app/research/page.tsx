@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Navbar from "../components/Navbar";
 import ReactMarkdown from "react-markdown";
 import { startupIdeaSchema, researchResponseSchema } from "../lib/schemas";
 import type { ResearchResponse, Forecast } from "../lib/types";
@@ -352,7 +353,7 @@ function MessageBubble({ message }: { message: Message }) {
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {/* Avatar - only show for assistant */}
       {!isUser && (
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className="w-8 h-8 bg-gradient-to-r from-black-500 to-gray-600 border border-gray-500 rounded-full flex items-center justify-center flex-shrink-0">
           <span className="text-white font-bold text-sm">S</span>
         </div>
       )}
@@ -384,7 +385,7 @@ function MessageBubble({ message }: { message: Message }) {
       
       {/* Avatar - only show for user */}
       {isUser && (
-        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className="w-8 h-8 bg-gradient-to-r from-black-500 to-gray-600 border border-gray-500 rounded-full flex items-center justify-center flex-shrink-0">
           <span className="text-gray-200 font-bold text-sm">U</span>
         </div>
       )}
@@ -402,7 +403,7 @@ function MessageBubble({ message }: { message: Message }) {
 function LoadingIndicator() {
   return (
     <div className="flex gap-3 justify-start">
-      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+      <div className="w-8 h-8 bg-gradient-to-r from-black-500 to-gray-600 border border-gray-500 rounded-full flex items-center justify-center flex-shrink-0">
         <span className="text-white font-bold text-sm">S</span>
       </div>
       <div className="bg-gray-800 border border-gray-700 rounded-2xl px-4 py-3">
@@ -581,24 +582,9 @@ export default function ResearchPage() {
   // ========== RENDER ==========
   
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
+    <div className="bg-[#0A0A0A] text-[#E5E7EB] min-h-screen">
       {/* Navigation Bar */}
-      <nav className="border-b border-gray-800 bg-gray-900/80 backdrop-blur supports-[backdrop-filter]:bg-gray-900/60 sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="/" className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
-            </a>
-            <div className="flex flex-col leading-tight">
-              <a href="/" className="text-white font-semibold">ScoutAI</a>
-              <span className="text-xs text-gray-400">Market Research Assistant</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="/" className="text-sm text-gray-300 hover:text-white">Home</a>
-          </div>
-        </div>
-      </nav>
+      <Navbar showHomeLink primaryLabel="Home" primaryHref="/" />
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
@@ -611,7 +597,7 @@ export default function ResearchPage() {
         </div>
 
         {/* Chat Container */}
-        <div className="flex flex-col h-[75vh] rounded-2xl border border-gray-800 bg-[#0f172a] w-[95%] max-w-7xl mx-auto">
+        <div className="flex flex-col h-[75vh] rounded-2xl border border-gray-500 bg-[#0A0A0A] w-[95%] max-w-7xl mx-auto">
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar">
             <div className="space-y-6 w-full">
@@ -646,7 +632,7 @@ export default function ResearchPage() {
           </div>
 
           {/* Input Form */}
-          <div className="border-t border-gray-800 px-4 py-4 bg-[#0b1220] rounded-b-2xl">
+          <div className="border-t border-gray-400 px-4 py-4 bg-[#0A0A0A] rounded-b-2xl">
             <form onSubmit={handleSubmit} className="flex gap-3">
               <div className="flex-1 relative">
                 <textarea
@@ -655,8 +641,8 @@ export default function ResearchPage() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Describe your startup idea..."
                   rows={1}
-                  maxLength={500}
-                  className="w-full px-4 py-3 pr-12 bg-gray-700 border border-gray-600 text-white placeholder-gray-400 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent overflow-hidden min-h-[48px] max-h-[200px]"
+                  maxLength={1000}
+                  className="w-full px-4 py-3 pr-12 bg-[#111111] border border-gray-700 text-white placeholder-gray-400 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent overflow-hidden min-h-[48px] max-h-[200px]"
                   disabled={isLoading}
                   onKeyDown={(e) => {
                     // Submit on Enter (but allow Shift+Enter for new lines)
@@ -666,17 +652,13 @@ export default function ResearchPage() {
                     }
                   }}
                   />
-                  {/* Character counter */}
-                  <div className="absolute right-3 bottom-3 text-xs text-gray-500">
-                    {input.length}/500
-                  </div>
                 </div>
                 
                 {/* Submit button */}
                 <button
                   type="submit"
                   disabled={isLoading || input.trim().length < 10}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  className="px-6 py-3 bg-[#111111] text-white rounded-2xl font-medium disabled:bg-[#1A1A1A] disabled:text-[#94A3B8] disabled:cursor-not-allowed transition-all flex items-center gap-2 border border-white/20 hover:border-white/40 hover:shadow-[0_10px_22px_rgba(255,255,255,0.18)] disabled:border-white/10"
                 >
                   {isLoading ? (
                     <>
