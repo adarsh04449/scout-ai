@@ -1,6 +1,5 @@
 [phases.setup]
-nixPkgs = ["python311Full"]
-aptPkgs = ["libstdc++6", "libgomp1"]
+nixPkgs = ["python311Full", "gcc"]
 
 [phases.install]
 cmds = [
@@ -9,6 +8,9 @@ cmds = [
   "/app/venv/bin/pip install -r api/requirements.txt",
   "/app/venv/bin/pip install -e market_research"
 ]
+
+[variables]
+LD_LIBRARY_PATH = "/root/.nix-profile/lib"
 
 [start]
 cmd = "/app/venv/bin/python -m uvicorn api.app.main:app --host 0.0.0.0 --port $PORT"
