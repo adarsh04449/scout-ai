@@ -2,13 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface NavbarProps {
-  showHomeLink?: boolean;
   primaryLabel?: string;
   primaryHref?: string;
 }
 
 export default function Navbar({
-  showHomeLink = false,
   primaryLabel = "Research your idea",
   primaryHref = "/research",
 }: NavbarProps) {

@@ -3,7 +3,14 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useState } from "react";
 
-const features = [
+type Feature = {
+  title: string;
+  description: string;
+  icon: string;
+  color: "blue" | "purple" | "emerald" | "pink";
+};
+
+const features: Feature[] = [
   {
     title: "Competitor Intelligence",
     description: "Comprehensive analysis of your competitive landscape with detailed positioning and market share insights.",
@@ -60,6 +67,149 @@ const colorClasses: Record<string, string> = {
   pink: "border-[#2A2A2A]"
 };
 
+function FeatureCard({ feature }: { feature: Feature }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 150, damping: 15 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 15 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    mouseX.set(x - 0.5);
+    mouseY.set(y - 0.5);
+  };
+
+  const glowColor = feature.color === "blue" ? "bg-[#3B82F6]/25" :
+                   feature.color === "purple" ? "bg-[#8B5CF6]/25" :
+                   feature.color === "emerald" ? "bg-[#10B981]/25" :
+                   "bg-[#EC4899]/25";
+
+  const borderGlowColor = feature.color === "blue" ? "bg-[#3B82F6]" :
+                          feature.color === "purple" ? "bg-[#8B5CF6]" :
+                          feature.color === "emerald" ? "bg-[#10B981]" :
+                          "bg-[#EC4899]";
+
+  const accentColor = feature.color === "blue" ? "bg-[#3B82F6]/25" :
+                     feature.color === "purple" ? "bg-[#8B5CF6]/25" :
+                     feature.color === "emerald" ? "bg-[#10B981]/25" :
+                     "bg-[#EC4899]/25";
+
+  const textHoverColor = feature.color === "blue" ? "#60A5FA" :
+                        feature.color === "purple" ? "#C4B5FD" :
+                        feature.color === "emerald" ? "#6EE7B7" :
+                        "#F9A8D4";
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        mouseX.set(0);
+        mouseY.set(0);
+      }}
+      className="relative overflow-visible"
+    >
+      {/* Glow effect background */}
+      <motion.div
+        className={`absolute inset-0 rounded-2xl blur-xl -z-10 ${glowColor}`}
+        animate={{
+          opacity: isHovered ? 0.8 : 0,
+          scale: isHovered ? 1.2 : 1,
+        }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Main card with 3D tilt */}
+      <motion.div
+        style={{
+          rotateX: isHovered ? rotateX : 0,
+          rotateY: isHovered ? rotateY : 0,
+          scale: isHovered ? 1.05 : 1,
+          transformStyle: "preserve-3d",
+        }}
+        className={`rounded-2xl border ${colorClasses[feature.color]} bg-[#111111] p-6 relative overflow-hidden transition-all duration-300 h-full flex flex-col shadow-[0_12px_30px_rgba(0,0,0,0.35)]`}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+        {/* Subtle 3D rim lighting */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-black/30" />
+        {/* Shine effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/10 pointer-events-none z-10"
+          animate={{
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Border glow */}
+        <motion.div
+          className={`absolute -inset-[2px] rounded-2xl blur-sm -z-10 ${borderGlowColor}`}
+          animate={{
+            opacity: isHovered ? 0.6 : 0,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Shimmer effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          animate={{
+            x: isHovered ? ["-100%", "100%"] : "-100%",
+          }}
+          transition={{
+            x: {
+              duration: 1.5,
+              repeat: isHovered ? Infinity : 0,
+              repeatDelay: 0.5,
+              ease: "easeInOut",
+            }
+          }}
+          style={{ transform: "translateX(-100%)" }}
+        />
+
+        <motion.div
+          animate={{
+            scale: isHovered ? 1.1 : 1,
+          }}
+          transition={{ duration: 0.3 }}
+          className="text-4xl mb-4"
+        >
+          {feature.icon}
+        </motion.div>
+
+        <motion.h3
+          className="text-xl font-semibold text-white mb-3"
+          animate={{
+            color: isHovered ? textHoverColor : "#ffffff",
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          {feature.title}
+        </motion.h3>
+
+        <p className="text-[#94A3B8] text-sm leading-relaxed relative z-0 flex-grow">
+          {feature.description}
+        </p>
+
+        {/* Corner accent */}
+        <motion.div
+          className={`absolute top-0 right-0 w-16 h-16 rounded-bl-full ${accentColor}`}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function Features() {
   return (
     <section className="relative w-full py-16 sm:py-20 bg-[#0A0A0A]">
@@ -86,149 +236,9 @@ export default function Features() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {features.map((feature, index) => {
-            const [isHovered, setIsHovered] = useState(false);
-            const mouseX = useMotionValue(0);
-            const mouseY = useMotionValue(0);
-            
-            const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 150, damping: 15 });
-            const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 15 });
-
-            const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = (e.clientX - rect.left) / rect.width;
-              const y = (e.clientY - rect.top) / rect.height;
-              mouseX.set(x - 0.5);
-              mouseY.set(y - 0.5);
-            };
-
-            const glowColor = feature.color === 'blue' ? 'bg-[#3B82F6]/25' :
-                             feature.color === 'purple' ? 'bg-[#8B5CF6]/25' :
-                             feature.color === 'emerald' ? 'bg-[#10B981]/25' :
-                             'bg-[#EC4899]/25';
-            
-            const borderGlowColor = feature.color === 'blue' ? 'bg-[#3B82F6]' :
-                                    feature.color === 'purple' ? 'bg-[#8B5CF6]' :
-                                    feature.color === 'emerald' ? 'bg-[#10B981]' :
-                                    'bg-[#EC4899]';
-            
-            const accentColor = feature.color === 'blue' ? 'bg-[#3B82F6]/25' :
-                               feature.color === 'purple' ? 'bg-[#8B5CF6]/25' :
-                               feature.color === 'emerald' ? 'bg-[#10B981]/25' :
-                               'bg-[#EC4899]/25';
-            
-            const textHoverColor = feature.color === 'blue' ? '#60A5FA' :
-                                  feature.color === 'purple' ? '#C4B5FD' :
-                                  feature.color === 'emerald' ? '#6EE7B7' :
-                                  '#F9A8D4';
-
-            return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => {
-                  setIsHovered(false);
-                  mouseX.set(0);
-                  mouseY.set(0);
-                }}
-                className="relative overflow-visible"
-              >
-                {/* Glow effect background */}
-                <motion.div 
-                  className={`absolute inset-0 rounded-2xl blur-xl -z-10 ${glowColor}`}
-                  animate={{
-                    opacity: isHovered ? 0.8 : 0,
-                    scale: isHovered ? 1.2 : 1,
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-                
-                {/* Main card with 3D tilt */}
-                <motion.div
-                  style={{
-                    rotateX: isHovered ? rotateX : 0,
-                    rotateY: isHovered ? rotateY : 0,
-                    scale: isHovered ? 1.05 : 1,
-                    transformStyle: "preserve-3d",
-                  }}
-                  className={`rounded-2xl border ${colorClasses[feature.color]} bg-[#111111] p-6 relative overflow-hidden transition-all duration-300 h-full flex flex-col shadow-[0_12px_30px_rgba(0,0,0,0.35)]`}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  {/* Subtle 3D rim lighting */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-black/30" />
-                  {/* Shine effect */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/10 pointer-events-none z-10"
-                    animate={{
-                      opacity: isHovered ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  
-                  {/* Border glow */}
-                  <motion.div 
-                    className={`absolute -inset-[2px] rounded-2xl blur-sm -z-10 ${borderGlowColor}`}
-                    animate={{
-                      opacity: isHovered ? 0.6 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  
-                  {/* Shimmer effect */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{
-                      x: isHovered ? ["-100%", "100%"] : "-100%",
-                    }}
-                    transition={{
-                      x: {
-                        duration: 1.5,
-                        repeat: isHovered ? Infinity : 0,
-                        repeatDelay: 0.5,
-                        ease: "easeInOut",
-                      }
-                    }}
-                    style={{ transform: "translateX(-100%)" }}
-                  />
-                  
-                  <motion.div
-                    animate={{
-                      scale: isHovered ? 1.1 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="text-4xl mb-4"
-                  >
-                    {feature.icon}
-                  </motion.div>
-                  
-                  <motion.h3 
-                    className="text-xl font-semibold text-white mb-3"
-                    animate={{
-                      color: isHovered ? textHoverColor : '#ffffff',
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {feature.title}
-                  </motion.h3>
-                  
-                  <p className="text-[#94A3B8] text-sm leading-relaxed relative z-0 flex-grow">
-                    {feature.description}
-                  </p>
-                  
-                  {/* Corner accent */}
-                  <motion.div 
-                    className={`absolute top-0 right-0 w-16 h-16 rounded-bl-full ${accentColor}`}
-                    animate={{
-                      opacity: isHovered ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+          {features.map((feature) => (
+            <FeatureCard key={feature.title} feature={feature} />
+          ))}
         </motion.div>
       </div>
     </section>

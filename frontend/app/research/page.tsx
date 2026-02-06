@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import type * as React from "react";
 import Navbar from "../components/Navbar";
 import ReactMarkdown from "react-markdown";
 import { startupIdeaSchema, researchResponseSchema } from "../lib/schemas";
@@ -213,49 +214,85 @@ function formatResearchResponse(data: ResearchResponse): { formatted: string; fo
  * Custom styles for ReactMarkdown components
  * This makes the markdown look nice in our dark theme
  */
+type MarkdownHeadingProps = React.HTMLAttributes<HTMLHeadingElement>;
+type MarkdownParagraphProps = React.HTMLAttributes<HTMLParagraphElement>;
+type MarkdownListProps = React.HTMLAttributes<HTMLUListElement>;
+type MarkdownOrderedListProps = React.HTMLAttributes<HTMLOListElement>;
+type MarkdownListItemProps = React.HTMLAttributes<HTMLLIElement>;
+type MarkdownStrongProps = React.HTMLAttributes<HTMLElement>;
+type MarkdownCodeProps = React.HTMLAttributes<HTMLElement> & { inline?: boolean };
+type MarkdownPreProps = React.HTMLAttributes<HTMLPreElement>;
+type MarkdownAnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
+type MarkdownSpanProps = React.HTMLAttributes<HTMLSpanElement> & { id?: string };
+
 const markdownComponents = {
-  h1: ({...props}: any) => <h1 className="text-xl font-bold text-white mb-3 mt-4 first:mt-0" {...props} />,
-  h2: ({...props}: any) => <h2 className="text-lg font-semibold text-white mb-2 mt-4 first:mt-0" {...props} />,
-  h3: ({...props}: any) => <h3 className="text-base font-semibold text-gray-200 mb-2 mt-3 first:mt-0" {...props} />,
-  p: ({...props}: any) => <p className="text-gray-200 mb-3 leading-relaxed" {...props} />,
-  ul: ({...props}: any) => <ul className="list-disc list-outside text-gray-200 mb-3 space-y-1 ml-4 [&>li]:leading-relaxed [&>li]:pl-2 [&>li]:break-words" {...props} />,
-  ol: ({...props}: any) => <ol className="list-decimal list-outside text-gray-200 mb-3 space-y-1 ml-4 [&>li]:leading-relaxed [&>li]:pl-2 [&>li]:break-words" {...props} />,
-  li: ({...props}: any) => <li className="text-gray-200 leading-relaxed [&>strong]:font-semibold [&>strong]:text-white break-words [&>ul]:ml-4 [&>ul]:mt-1" {...props} />,
-  strong: ({...props}: any) => <strong className="font-semibold text-white" {...props} />,
-  code: ({inline, ...props}: any) => 
+  h1: ({ ...props }: MarkdownHeadingProps) => (
+    <h1 className="text-xl font-bold text-white mb-3 mt-4 first:mt-0" {...props} />
+  ),
+  h2: ({ ...props }: MarkdownHeadingProps) => (
+    <h2 className="text-lg font-semibold text-white mb-2 mt-4 first:mt-0" {...props} />
+  ),
+  h3: ({ ...props }: MarkdownHeadingProps) => (
+    <h3 className="text-base font-semibold text-gray-200 mb-2 mt-3 first:mt-0" {...props} />
+  ),
+  p: ({ ...props }: MarkdownParagraphProps) => (
+    <p className="text-gray-200 mb-3 leading-relaxed" {...props} />
+  ),
+  ul: ({ ...props }: MarkdownListProps) => (
+    <ul className="list-disc list-outside text-gray-200 mb-3 space-y-1 ml-4 [&>li]:leading-relaxed [&>li]:pl-2 [&>li]:break-words" {...props} />
+  ),
+  ol: ({ ...props }: MarkdownOrderedListProps) => (
+    <ol className="list-decimal list-outside text-gray-200 mb-3 space-y-1 ml-4 [&>li]:leading-relaxed [&>li]:pl-2 [&>li]:break-words" {...props} />
+  ),
+  li: ({ ...props }: MarkdownListItemProps) => (
+    <li className="text-gray-200 leading-relaxed [&>strong]:font-semibold [&>strong]:text-white break-words [&>ul]:ml-4 [&>ul]:mt-1" {...props} />
+  ),
+  strong: ({ ...props }: MarkdownStrongProps) => (
+    <strong className="font-semibold text-white" {...props} />
+  ),
+  code: ({ inline, ...props }: MarkdownCodeProps) =>
     inline ? (
       <code className="bg-gray-700 px-1.5 py-0.5 rounded text-sm text-gray-100" {...props} />
     ) : (
       <code className="block bg-gray-900 p-3 rounded text-sm text-gray-200 overflow-x-auto" {...props} />
     ),
-  pre: ({...props}: any) => <pre className="bg-gray-900 p-3 rounded text-sm text-gray-200 overflow-x-auto mb-3" {...props} />,
-  
+  pre: ({ ...props }: MarkdownPreProps) => (
+    <pre className="bg-gray-900 p-3 rounded text-sm text-gray-200 overflow-x-auto mb-3" {...props} />
+  ),
   // Handle links - both external URLs and internal anchor links
-  a: ({href, ...props}: any) => {
-    const isAnchor = href?.startsWith('#');
+  a: ({ href, ...props }: MarkdownAnchorProps) => {
+    const isAnchor = href?.startsWith("#");
     return (
-      <a 
-        className="text-blue-400 hover:text-blue-300 underline break-all" 
+      <a
+        className="text-blue-400 hover:text-blue-300 underline break-all"
         target={isAnchor ? undefined : "_blank"}
         rel={isAnchor ? undefined : "noopener noreferrer"}
         href={href}
-        onClick={isAnchor ? (e) => {
-          // Smooth scroll to anchor link
-          e.preventDefault();
-          const element = document.querySelector(href);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        } : undefined}
-        {...props} 
+        onClick={
+          isAnchor
+            ? (e) => {
+                // Smooth scroll to anchor link
+                e.preventDefault();
+                if (!href) return;
+                const element = document.querySelector(href);
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }
+            : undefined
+        }
+        {...props}
       />
     );
   },
-  
   // Handle source citation anchors
-  span: ({id, children, ...props}: any) => {
-    if (id?.startsWith('source-')) {
-      return <span id={id} className="text-blue-400 font-medium" {...props}>{children}</span>;
+  span: ({ id, children, ...props }: MarkdownSpanProps) => {
+    if (id?.startsWith("source-")) {
+      return (
+        <span id={id} className="text-blue-400 font-medium" {...props}>
+          {children}
+        </span>
+      );
     }
     return <span {...props}>{children}</span>;
   },
@@ -474,7 +511,7 @@ export default function ResearchPage() {
     let data;
     try {
       data = await res.json();
-    } catch (err) {
+    } catch {
       throw new Error("Failed to parse API response. The server may have returned invalid JSON.");
     }
     
@@ -584,7 +621,7 @@ export default function ResearchPage() {
   return (
     <div className="bg-[#0A0A0A] text-[#E5E7EB] min-h-screen">
       {/* Navigation Bar */}
-      <Navbar showHomeLink primaryLabel="Home" primaryHref="/" />
+      <Navbar primaryLabel="Home" primaryHref="/" />
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
@@ -609,7 +646,7 @@ export default function ResearchPage() {
                     Describe your startup idea and get competitors, trends, and a chart‑ready forecast.
                   </p>
                   <p className="text-sm text-gray-400">
-                    Try: "AI‑powered meal planning app for busy professionals"
+                    Try: &quot;AI‑powered meal planning app for busy professionals&quot;
                   </p>
                 </div>
               )}

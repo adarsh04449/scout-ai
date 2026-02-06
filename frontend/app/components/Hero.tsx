@@ -1,10 +1,112 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import StartupCard from "./StartupCard";
-import { startups } from "./startupData";
+import { startups, type Startup } from "./startupData";
+
+function StartupCardDesktop({
+  startup,
+  index,
+  scrollYProgress,
+}: {
+  startup: Startup;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const speed = startup.speed || 0.5;
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, -150 * speed]);
+  const translateX = useTransform(scrollYProgress, [0, 1], [0, 100 * speed]);
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [startup.initialRotate || 0, (startup.initialRotate || 0) - 60 * speed],
+    { clamp: false }
+  );
+  const opacity = useTransform(scrollYProgress, [1, 1, 1], [1, 1, 1]);
+
+  let leftPercent: number;
+  let topPercent: number;
+  if (startup.title === "Vercel") {
+    leftPercent = 65;
+    topPercent = 65;
+  } else {
+    const row = Math.floor(index / 3);
+    const col = index % 3;
+    leftPercent = 10 + col * 30 + (startup.initialX || 0) / 10;
+    topPercent = 10 + row * 30 + (startup.initialY || 0) / 10;
+  }
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: `${leftPercent}%`,
+        top: `${topPercent}%`,
+        width: "450px",
+        height: "300px",
+      }}
+      className="hidden md:block"
+    >
+      <StartupCard
+        startup={startup}
+        translateX={translateX}
+        translateY={translateY}
+        rotate={rotate}
+        opacity={opacity}
+      />
+    </div>
+  );
+}
+
+function StartupCardMobile({
+  startup,
+  index,
+  scrollYProgress,
+}: {
+  startup: Startup;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const speed = startup.speed || 0.5;
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, -100 * speed]);
+  const translateX = useTransform(scrollYProgress, [0, 1], [0, 50 * speed]);
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [startup.initialRotate || 0, (startup.initialRotate || 0) - 40 * speed],
+    { clamp: false }
+  );
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 0.9, 0.65]);
+
+  const positions = [
+    { left: "5%", top: "15%" },
+    { left: "55%", top: "20%" },
+    { left: "10%", top: "60%" },
+    { left: "60%", top: "65%" },
+  ];
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        ...positions[index],
+        width: "200px",
+        height: "140px",
+      }}
+      className="block md:hidden"
+    >
+      <StartupCard
+        startup={startup}
+        translateX={translateX}
+        translateY={translateY}
+        rotate={rotate}
+        opacity={opacity}
+      />
+    </div>
+  );
+}
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,122 +130,24 @@ export default function Hero() {
       {/* Startup Cards Background - Parallax Effect */}
       <div className="absolute inset-0 z-0">
         {/* Desktop: Show all cards */}
-        {startups.map((startup, index) => {
-          // Different parallax speeds for each card
-          const speed = startup.speed || 0.5;
-          const translateY = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [0, -150 * speed]
-          );
-          const translateX = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [0, 100 * speed]
-          );
-          const rotate = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [startup.initialRotate || 0, (startup.initialRotate || 0) - 60 * speed],
-            { clamp: false }
-          );
-          const opacity = useTransform(
-            scrollYProgress,
-            [1, 1, 1],
-            [1, 1, 1]
-          );
-
-          // Special positioning for Vercel card - to the right of the button
-          let leftPercent, topPercent;
-          if (startup.title === "Vercel") {
-            // Position to the right of the centered button (button is at ~50% center)
-            // Button area is roughly at center, so position Vercel at ~65-70% from left
-            leftPercent = 65;
-            topPercent = 65; // Position it near the button level (button is around 60-70% from top)
-          } else {
-            // Position other cards in a grid-like pattern
-            const row = Math.floor(index / 3);
-            const col = index % 3;
-            leftPercent = 10 + col * 30 + (startup.initialX || 0) / 10;
-            topPercent = 10 + row * 30 + (startup.initialY || 0) / 10;
-          }
-
-          return (
-            <div
-              key={startup.title}
-              style={{
-                position: "absolute",
-                left: `${leftPercent}%`,
-                top: `${topPercent}%`,
-                width: "450px",
-                height: "300px",
-              }}
-              className="hidden md:block"
-            >
-              <StartupCard 
-                startup={startup} 
-                translateX={translateX}
-                translateY={translateY}
-                rotate={rotate}
-                opacity={opacity}
-              />
-            </div>
-          );
-        })}
+        {startups.map((startup, index) => (
+          <StartupCardDesktop
+            key={startup.title}
+            startup={startup}
+            index={index}
+            scrollYProgress={scrollYProgress}
+          />
+        ))}
         
         {/* Mobile: Show fewer cards */}
-        {startups.slice(0, 4).map((startup, index) => {
-          const speed = startup.speed || 0.5;
-          const translateY = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [0, -100 * speed]
-          );
-          const translateX = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [0, 50 * speed]
-          );
-          const rotate = useTransform(
-            scrollYProgress,
-            [0, 1],
-            [startup.initialRotate || 0, (startup.initialRotate || 0) - 40 * speed],
-            { clamp: false }
-          );
-          const opacity = useTransform(
-            scrollYProgress,
-            [0, 0.5, 1],
-            [0.9, 0.9, 0.65]
-          );
-
-          const positions = [
-            { left: "5%", top: "15%" },
-            { left: "55%", top: "20%" },
-            { left: "10%", top: "60%" },
-            { left: "60%", top: "65%" },
-          ];
-
-          return (
-            <div
-              key={`mobile-${startup.title}`}
-              style={{
-                position: "absolute",
-                ...positions[index],
-                width: "200px",
-                height: "140px",
-              }}
-              className="block md:hidden"
-            >
-              <StartupCard 
-                startup={startup} 
-                translateX={translateX}
-                translateY={translateY}
-                rotate={rotate}
-                opacity={opacity}
-              />
-            </div>
-          );
-        })}
+        {startups.slice(0, 4).map((startup, index) => (
+          <StartupCardMobile
+            key={`mobile-${startup.title}`}
+            startup={startup}
+            index={index}
+            scrollYProgress={scrollYProgress}
+          />
+        ))}
       </div>
 
       {/* Overlay for better text readability */}

@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 
 export default function Demo() {
-  const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL;
   const localDemo = "/demo.mp4";
 
   return (
@@ -30,33 +29,21 @@ export default function Demo() {
           <div className="grid md:grid-cols-2">
             {/* Video (first on mobile) */}
             <div className="order-1 md:order-2">
-              {demoUrl ? (
-                <div className="aspect-video w-full">
-                  <iframe
-                    src={demoUrl}
-                    title="ScoutAI demo"
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              ) : (
-                <div className="h-full w-full flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(47,91,255,0.18),transparent_50%)]">
-                  <video
-                    className="w-full h-full object-contain pointer-events-none"
-                    src={localDemo}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                </div>
-              )}
+              <div className="h-full w-full flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(47,91,255,0.18),transparent_50%)]">
+                <video
+                  className="w-full h-full object-contain pointer-events-none"
+                  src={localDemo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              </div>
             </div>
             
             {/* Story (left on desktop, below on mobile) */}
             <div className="order-2 md:order-1 p-6 md:p-8">
-              <h3 className="text-xl font-semibold mb-4 text-white">A founder's 2‑minute validation</h3>
+              <h3 className="text-xl font-semibold mb-4 text-white">A founder&apos;s 2‑minute validation</h3>
               <div className="space-y-4 text-[#94A3B8] text-sm leading-relaxed">
                 <p>
                   Priya is exploring an idea for an <span className="text-white font-medium">AI‑powered meal planning app</span>. She opens ScoutAI, types a single sentence,
@@ -68,7 +55,7 @@ export default function Demo() {
                 </p>
                 <p>
                   She shares the report with her co‑founder and investor friends. With sources attached and numbers clearly marked as
-                  conservative vs optimistic, the conversation moves from "is the market real?" to "how do we win our first niche?".
+                  conservative vs optimistic, the conversation moves from &quot;is the market real?&quot; to &quot;how do we win our first niche?&quot;.
                 </p>
                 <p className="text-[#94A3B8] italic">
                   You can do the same for your idea—no spreadsheets, no hours of tab hunting. Try it now and get an investor‑ready brief.
