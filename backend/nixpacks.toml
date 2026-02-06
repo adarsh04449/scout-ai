@@ -1,12 +1,12 @@
 [phases.setup]
-nixPkgs = ["python311", "python311Packages.pip"]
+nixPkgs = ["python311", "python311Packages.pip", "python311Packages.setuptools", "python311Packages.wheel"]
 
 [phases.install]
 cmds = [
-  "python -m pip install -r api/requirements.txt",
-  "python -m pip install -e market_research"
+  "pip3 install -r api/requirements.txt",
+  "pip3 install -e market_research"
 ]
 
 [start]
-cmd = "python -m uvicorn api.app.main:app --host 0.0.0.0 --port $PORT"
+cmd = "python3 -m uvicorn api.app.main:app --host 0.0.0.0 --port $PORT"
 
