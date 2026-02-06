@@ -1,5 +1,6 @@
 [phases.setup]
 nixPkgs = ["python311Full"]
+aptPkgs = ["libstdc++6", "libgomp1"]
 
 [phases.install]
 cmds = [
