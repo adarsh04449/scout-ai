@@ -53,6 +53,10 @@ The system mimics how a human analyst would approach research — but faster.
 - CrewAI (multi-agent orchestration)  
 - Python
 
+### Deployment
+- Vercel (frontend)  
+- Railway (backend)
+  
 ---
 
 ## ✨ Key Features
@@ -70,11 +74,4 @@ The system mimics how a human analyst would approach research — but faster.
 - Deployed across Vercel + Railway  
 - Accelerated development using Cursor  
 - Clean full-stack architecture  
-- Cloud deployment  
-
-
-### Deployment
-- Vercel (frontend)  
-- Railway (backend)  
-
-
+- Cloud deployment   
