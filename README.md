@@ -51,7 +51,27 @@ The system mimics how a human analyst would approach research — but faster.
 ### Backend
 - FastAPI  
 - CrewAI (multi-agent orchestration)  
-- Python  
+- Python
+
+---
+
+## ✨ Key Features
+
+- Agent-based research workflow  
+- Structured, investor-ready reports  
+- Real-time prompt-to-report pipeline  
+
+---
+
+## 🎯 Technical Highlights
+
+- Designed an agentic workflow using CrewAI  
+- Built full-stack pipeline from prompt → structured JSON → UI rendering  
+- Deployed across Vercel + Railway  
+- Accelerated development using Cursor  
+- Clean full-stack architecture  
+- Cloud deployment  
+
 
 ### Deployment
 - Vercel (frontend)  
